@@ -1,5 +1,5 @@
 class Sheet < ActiveRecord::Base
-  has_many :boxes
+  has_many :boxes, :dependent => :destroy
 
   validates :home_team, :away_team, :presence => true
 
