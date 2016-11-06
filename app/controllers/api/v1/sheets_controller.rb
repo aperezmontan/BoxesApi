@@ -7,34 +7,34 @@ module Api
         @sheet = ::Sheet.new(sheet_params)
 
         if @sheet.save
-          render json: @sheet, :status => :created
+          render json: @sheet, :status => :created, :adapter => :json
         else
-          render json: @sheet.errors, :status => :unprocessable_entity
+          render json: @sheet.errors, :status => :unprocessable_entity, :adapter => :json
         end
       end
 
       def destroy
         if @sheet.destroy
-          render json: {}, :status => :no_content
+          render json: {}, :status => :no_content, :adapter => :json
         else
-          render json: @sheet.errors, :status => :unprocessable_entity
+          render json: @sheet.errors, :status => :unprocessable_entity, :adapter => :json
         end
       end
 
       def index
         @sheets = ::Sheet.all
-        render json: @sheets
+        render json: @sheets, :adapter => :json
       end
 
       def show
-        render json: @sheet
+        render json: @sheet, :adapter => :json
       end
 
       def update
         if @sheet.update_attributes(sheet_params)
-          render json: {}, :status => :no_content
+          render json: {}, :status => :no_content, :adapter => :json
         else
-          render json: @sheet.errors, :status => :unprocessable_entity
+          render json: @sheet.errors, :status => :unprocessable_entity, :adapter => :json
         end
       end
 
