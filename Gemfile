@@ -23,6 +23,8 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 group :development, :test do
   # Call 'pry' anywhere in the code to stop execution and get a debugger console
   gem 'pry'
+  # Test that ish bruh
+  gem 'rspec-rails'
 end
 
 group :development do
