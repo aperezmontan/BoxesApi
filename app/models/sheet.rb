@@ -5,8 +5,8 @@ class Sheet < ActiveRecord::Base
 
   before_create :init_boxes
   before_create :generate_code
-  before_save :close_sheet, :if => Proc.new { |sheet| sheet.all_boxes_full? }
-  before_save :set_team_score_arrays, :if => Proc.new { |sheet| sheet.closed? }
+  before_save :close_sheet, :if => Proc.new { |sheet| sheet.all_boxes_full? && !sheet.closed?}
+  before_save :set_team_score_arrays, :if => Proc.new { |sheet| sheet.closed? && sheet.team_score_arrays_blank? }
 
   def set_team_score_arrays
     self.home_team_score_row = random_score_array
@@ -24,6 +24,10 @@ class Sheet < ActiveRecord::Base
 
   def close_sheet
     self.closed = true
+  end
+
+  def team_score_arrays_blank?
+    home_team_score_row.blank? || away_team_score_row.blank?
   end
 
   private
