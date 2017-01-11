@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  mount_devise_token_auth_for 'User', at: 'auth'
   scope module: 'api' do
     scope module: 'v1' do
       resources :sheets, :except => [:new, :edit] do
