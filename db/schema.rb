@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111020144) do
+ActiveRecord::Schema.define(version: 20170111025211) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,9 +42,11 @@ ActiveRecord::Schema.define(version: 20170111020144) do
     t.integer  "home_team_score_row",              array: true
     t.integer  "away_team_score_row",              array: true
     t.boolean  "closed"
+    t.integer  "user_id"
   end
 
   add_index "sheets", ["sheet_code"], name: "index_sheets_on_sheet_code", unique: true, using: :btree
+  add_index "sheets", ["user_id"], name: "index_sheets_on_user_id", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.string   "provider",               default: "email", null: false
@@ -76,4 +78,5 @@ ActiveRecord::Schema.define(version: 20170111020144) do
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
   add_foreign_key "boxes", "sheets"
+  add_foreign_key "sheets", "users"
 end
