@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 gem 'active_model_serializers'
 gem 'devise_token_auth'
+gem 'omniauth'
 gem 'pg', '~> 0.15'
 gem 'rails', '4.2.5.1'
 gem 'rails-api'
