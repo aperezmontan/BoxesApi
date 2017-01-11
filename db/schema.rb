@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161106130742) do
+ActiveRecord::Schema.define(version: 20170109050322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,7 @@ ActiveRecord::Schema.define(version: 20161106130742) do
     t.integer  "sheet_id"
     t.string   "home_team_id"
     t.string   "away_team_id"
+    t.text     "owner_name"
   end
 
   add_index "boxes", ["home_team_id", "away_team_id", "sheet_id"], name: "index_boxes_on_home_team_id_and_away_team_id_and_sheet_id", unique: true, using: :btree
@@ -33,9 +34,17 @@ ActiveRecord::Schema.define(version: 20161106130742) do
     t.string   "home_team"
     t.string   "away_team"
     t.string   "name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.text     "sheet_code"
+    t.text     "password"
+    t.integer  "box_amount"
+    t.integer  "home_team_score_row",              array: true
+    t.integer  "away_team_score_row",              array: true
+    t.boolean  "closed"
   end
+
+  add_index "sheets", ["sheet_code"], name: "index_sheets_on_sheet_code", unique: true, using: :btree
 
   add_foreign_key "boxes", "sheets"
 end
