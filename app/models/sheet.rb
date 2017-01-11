@@ -5,7 +5,6 @@ class Sheet < ActiveRecord::Base
 
   before_create :init_boxes
   before_create :generate_code
-  before_save :close_sheet, :if => Proc.new { |sheet| sheet.all_boxes_full? && !sheet.closed?}
   before_save :set_team_score_arrays, :if => Proc.new { |sheet| sheet.closed? && sheet.team_score_arrays_blank? }
 
   def set_team_score_arrays
@@ -20,10 +19,6 @@ class Sheet < ActiveRecord::Base
 
   def all_boxes_full?
     boxes.all? { |box| box.owner_name.present? }
-  end
-
-  def close_sheet
-    self.closed = true
   end
 
   def team_score_arrays_blank?
