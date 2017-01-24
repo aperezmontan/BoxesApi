@@ -1,6 +1,7 @@
 class Sheet < ActiveRecord::Base
   has_many :boxes, :dependent => :destroy
   belongs_to :user
+  belongs_to :game
 
   validates :home_team, :away_team, :presence => true
 
@@ -42,6 +43,6 @@ class Sheet < ActiveRecord::Base
     id_array = ids.product(ids)
     id_array.each do |x_coord, y_coord|
       self.boxes.build(:home_team_id => x_coord, :away_team_id => y_coord)
-    end 
+    end
   end
 end
