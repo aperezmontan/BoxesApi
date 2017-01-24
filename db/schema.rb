@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170111025211) do
+ActiveRecord::Schema.define(version: 20170124035915) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -29,6 +29,15 @@ ActiveRecord::Schema.define(version: 20170111025211) do
 
   add_index "boxes", ["home_team_id", "away_team_id", "sheet_id"], name: "index_boxes_on_home_team_id_and_away_team_id_and_sheet_id", unique: true, using: :btree
   add_index "boxes", ["sheet_id"], name: "index_boxes_on_sheet_id", using: :btree
+
+  create_table "games", force: :cascade do |t|
+    t.text     "home_team"
+    t.text     "away_team"
+    t.text     "league"
+    t.datetime "game_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "sheets", force: :cascade do |t|
     t.string   "home_team"
