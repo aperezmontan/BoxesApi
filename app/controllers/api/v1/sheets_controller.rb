@@ -2,9 +2,12 @@ module Api
   module V1
     class SheetsController < ApplicationController
       before_action :set_sheet, :only => [:destroy, :show, :update]
+      before_action :authenticate_user!, :only => [:create, :update]
+      before_action :permit_user_update, :only => [:update]
+      # Will need to make sure a user can 
 
       def create
-        @sheet = ::Sheet.new(sheet_params)
+        @sheet = current_user.sheets.build(sheet_params)
 
         if @sheet.save
           render json: @sheet, :status => :created, :adapter => :json
@@ -39,6 +42,10 @@ module Api
       end
 
       private
+
+      def permit_user_update
+        raise ArgumentError unless @sheet.belongs_to_user?(current_user)
+      end
 
       def set_sheet
         @sheet = ::Sheet.find(params[:id])

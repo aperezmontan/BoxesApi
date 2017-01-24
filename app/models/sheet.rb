@@ -1,11 +1,16 @@
 class Sheet < ActiveRecord::Base
   has_many :boxes, :dependent => :destroy
+  belongs_to :user
 
   validates :home_team, :away_team, :presence => true
 
   before_create :init_boxes
   before_create :generate_code
   before_save :set_team_score_arrays, :if => Proc.new { |sheet| sheet.closed? && sheet.team_score_arrays_blank? }
+
+  def belongs_to_user?(user)
+    user_id == user.id
+  end
 
   def set_team_score_arrays
     self.home_team_score_row = random_score_array
