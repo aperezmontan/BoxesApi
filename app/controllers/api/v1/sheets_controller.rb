@@ -2,9 +2,8 @@ module Api
   module V1
     class SheetsController < ApplicationController
       before_action :set_sheet, :only => [:destroy, :show, :update]
-      before_action :authenticate_user!, :only => [:create, :update]
-      before_action :permit_user_update, :only => [:update]
-      # Will need to make sure a user can 
+      before_action :authenticate_user!, :only => [:create, :update, :destroy]
+      before_action :permit_user_update, :only => [:update, :destroy]
 
       def create
         @sheet = current_user.sheets.build(sheet_params)

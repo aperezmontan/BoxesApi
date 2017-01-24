@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170124035939) do
+ActiveRecord::Schema.define(version: 20170124040323) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -25,10 +25,12 @@ ActiveRecord::Schema.define(version: 20170124035939) do
     t.string   "home_team_id"
     t.string   "away_team_id"
     t.text     "owner_name"
+    t.integer  "user_id"
   end
 
   add_index "boxes", ["home_team_id", "away_team_id", "sheet_id"], name: "index_boxes_on_home_team_id_and_away_team_id_and_sheet_id", unique: true, using: :btree
   add_index "boxes", ["sheet_id"], name: "index_boxes_on_sheet_id", using: :btree
+  add_index "boxes", ["user_id"], name: "index_boxes_on_user_id", using: :btree
 
   create_table "games", force: :cascade do |t|
     t.text     "home_team"
@@ -89,6 +91,7 @@ ActiveRecord::Schema.define(version: 20170124035939) do
   add_index "users", ["uid", "provider"], name: "index_users_on_uid_and_provider", unique: true, using: :btree
 
   add_foreign_key "boxes", "sheets"
+  add_foreign_key "boxes", "users"
   add_foreign_key "sheets", "games"
   add_foreign_key "sheets", "users"
 end
