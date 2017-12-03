@@ -1,4 +1,4 @@
-class Box < ActiveRecord::Base
+class Box < ApplicationRecord
   belongs_to :sheet
   belongs_to :user
   after_save :save_sheet

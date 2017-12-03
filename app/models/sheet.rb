@@ -1,4 +1,4 @@
-class Sheet < ActiveRecord::Base
+class Sheet < ApplicationRecord
   has_many :boxes, :dependent => :destroy
   belongs_to :user
   belongs_to :game
