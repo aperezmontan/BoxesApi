@@ -1,4 +1,4 @@
-class User < ActiveRecord::Base
+class User < ApplicationRecord
   has_many :sheets
   has_many :boxes
   # Include default devise modules.

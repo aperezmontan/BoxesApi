@@ -1,4 +1,4 @@
-class AddCoordsAndIndexToBoxes < ActiveRecord::Migration
+class AddCoordsAndIndexToBoxes < ActiveRecord::Migration[5.1]
   def change
     add_column :boxes, :home_team_id, :string
     add_column :boxes, :away_team_id, :string

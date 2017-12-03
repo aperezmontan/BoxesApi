@@ -1,3 +1,3 @@
-class Game < ActiveRecord::Base
+class Game < ApplicationRecord
   has_many :sheets
 end
