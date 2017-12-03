@@ -1,0 +1,25 @@
+Naming/FileName:
+  Exclude:
+    - 'Gemfile'
+
+Metrics/LineLength:
+  Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Style/MultilineIfModifier:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+Lint/UnneededDisable:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*.rake'
+    - 'spec/**/*'
+    - 'db/migrate/*.rb'
+    - 'db/schema.rb'
