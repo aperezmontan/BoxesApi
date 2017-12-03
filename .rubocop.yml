@@ -1,6 +1,7 @@
 AllCops:
   Excludes:
     - 'db/**/*'
+    - 'vendor/**/*'
 
 Naming/FileName:
   Exclude:
