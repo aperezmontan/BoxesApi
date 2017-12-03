@@ -9,7 +9,7 @@ module Api
         # TODO: when devise is set up this won't be needed.  It sets current_user
         current_user = User.find(sheet_params.fetch(:user_id))
         @sheet = current_user.sheets.build(sheet_params)
-# binding.pry
+
         if @sheet.save
           render json: @sheet, :status => :created, :adapter => :json
         else

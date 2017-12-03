@@ -1,4 +1,4 @@
-class AddIdentifiersToSheet < ActiveRecord::Migration
+class AddIdentifiersToSheet < ActiveRecord::Migration[5.1]
   def change
     add_column :sheets, :sheet_code, :text
     add_column :sheets, :password, :text
