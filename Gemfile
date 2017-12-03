@@ -16,6 +16,7 @@ end
 group :development do
   gem 'listen'
   gem 'web-console', '~> 2.0'
+  gem 'rubocop', require: false
   gem 'spring'
 end
 
