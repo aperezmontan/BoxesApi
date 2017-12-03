@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class SheetsController < ApplicationController
-      before_action :set_sheet, :only => [:destroy, :show, :update]
+      before_action :set_sheet, :only => %i[destroy show update]
       # before_action :authenticate_user!, :only => [:create, :update, :destroy]
       # before_action :permit_user_update, :only => [:update, :destroy]
 
@@ -11,34 +13,34 @@ module Api
         @sheet = current_user.sheets.build(sheet_params)
 
         if @sheet.save
-          render json: @sheet, :status => :created, :adapter => :json
+          render :json => @sheet, :status => :created, :adapter => :json
         else
-          render json: @sheet.errors, :status => :unprocessable_entity, :adapter => :json
+          render :json => @sheet.errors, :status => :unprocessable_entity, :adapter => :json
         end
       end
 
       def destroy
         if @sheet.destroy
-          render json: {}, :status => :no_content, :adapter => :json
+          render :json => {}, :status => :no_content, :adapter => :json
         else
-          render json: @sheet.errors, :status => :unprocessable_entity, :adapter => :json
+          render :json => @sheet.errors, :status => :unprocessable_entity, :adapter => :json
         end
       end
 
       def index
         @sheets = ::Sheet.all
-        render json: @sheets, :adapter => :json
+        render :json => @sheets, :adapter => :json
       end
 
       def show
-        render json: @sheet, :adapter => :json
+        render :json => @sheet, :adapter => :json
       end
 
       def update
         if @sheet.update_attributes(sheet_params)
-          render json: @sheet, :adapter => :json
+          render :json => @sheet, :adapter => :json
         else
-          render json: @sheet.errors, :status => :unprocessable_entity, :adapter => :json
+          render :json => @sheet.errors, :status => :unprocessable_entity, :adapter => :json
         end
       end
 
@@ -53,9 +55,9 @@ module Api
       end
 
       def sheet_params
-        params.require(:sheet).permit(:home_team, :away_team, :box_amount, :password, :name, :closed, :game_id, :user_id)
+        params.require(:sheet)
+              .permit(:home_team, :away_team, :box_amount, :password, :name, :closed, :game_id, :user_id)
       end
     end
   end
 end
-

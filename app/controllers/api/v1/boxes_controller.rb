@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class BoxesController < ApplicationController
@@ -11,7 +13,7 @@ module Api
         if @box.update(box_params)
           head :no_content
         else
-          render json: @box, :status => :unprocessable_entity
+          render :json => @box, :status => :unprocessable_entity
         end
       end
 

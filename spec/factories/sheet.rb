@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :sheet do
-    home_team "home"
-    away_team "away"
-    name "new_sheet"
+    home_team 'home'
+    away_team 'away'
+    name 'new_sheet'
     user
     game
   end

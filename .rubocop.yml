@@ -1,0 +1,31 @@
+AllCops:
+  Excludes:
+    - 'db/**/*'
+    - 'vendor/**/*'
+
+Naming/FileName:
+  Exclude:
+    - 'Gemfile'
+
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
+
+Metrics/LineLength:
+  Max: 120
+
+Style/Documentation:
+  Enabled: false
+
+Style/MultilineIfModifier:
+  Enabled: false
+
+Style/RaiseArgs:
+  Enabled: false
+
+Lint/UnneededDisable:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - '**/*.rake'
+    - 'spec/**/*'
