@@ -1,6 +1,13 @@
+AllCops:
+  Excludes:
+    - 'db/**/*'
+
 Naming/FileName:
   Exclude:
     - 'Gemfile'
+
+Style/HashSyntax:
+  EnforcedStyle: hash_rockets
 
 Metrics/LineLength:
   Max: 120
@@ -21,5 +28,3 @@ Metrics/BlockLength:
   Exclude:
     - '**/*.rake'
     - 'spec/**/*'
-    - 'db/migrate/*.rb'
-    - 'db/schema.rb'

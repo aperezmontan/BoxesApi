@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Sheet < ApplicationRecord
   has_many :boxes, :dependent => :destroy
   belongs_to :user
@@ -6,9 +8,26 @@ class Sheet < ApplicationRecord
   validates :home_team, :away_team, :presence => true
 
   def self.start_new_sheet(sheet_params)
-    instance = new(sheet_params.merge!(:sheet_code => self.generate_code))
-    self.init_boxes(instance)
-    return instance
+    instance = new(sheet_params.merge!(:sheet_code => generate_code))
+    init_boxes(instance)
+    instance
+  end
+
+  class << self
+    private
+
+    def generate_code
+      ('A'..'Z').to_a.shuffle.sample(4).join
+    end
+
+    def init_boxes(instance)
+      # Creates 100 boxes with coordinates being a letter between A and J
+      ids = ('A'..'J').to_a
+      id_array = ids.product(ids)
+      id_array.each do |x_coord, y_coord|
+        instance.boxes.build(:home_team_id => x_coord, :away_team_id => y_coord)
+      end
+    end
   end
 
   def belongs_to_user?(user)
@@ -18,7 +37,7 @@ class Sheet < ApplicationRecord
   def set_team_score_arrays
     self.home_team_score_row = random_score_array
     self.away_team_score_row = random_score_array
-    self.save
+    save
   end
 
   def all_boxes_full?
@@ -30,19 +49,6 @@ class Sheet < ApplicationRecord
   end
 
   private
-
-  def self.generate_code
-    ("A".."Z").to_a.shuffle.sample(4).join
-  end
-
-  def self.init_boxes(instance)
-    # Creates 100 boxes with coordinates being a letter between A and J
-    ids = ("A".."J").to_a
-    id_array = ids.product(ids)
-    id_array.each do |x_coord, y_coord|
-      instance.boxes.build(:home_team_id => x_coord, :away_team_id => y_coord)
-    end
-  end
 
   def random_score_array
     (0..9).to_a.shuffle
