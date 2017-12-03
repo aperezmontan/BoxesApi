@@ -7,7 +7,7 @@ describe "Sheets", :type => :request do
   describe 'post /sheets' do
     let(:body) { JSON.parse(response.body) }
 
-    subject { post "/sheets", :params => { :sheet => { :home_team => "home", :away_team => "away", :game_id => Game.first.id, :user_id => User.first.id } } }
+    subject { post "/sheets", :params => { :sheet => { :name => "new_new_sheet", :home_team => "home", :away_team => "away", :game_id => Game.first.id, :user_id => User.first.id } } }
 
     context "with valid params" do
       it "creates the sheet" do
@@ -31,7 +31,7 @@ describe "Sheets", :type => :request do
     context "with bad params" do
       context "without unpermitted params" do
         it "ignores unpermitted params" do
-          post "/sheets", :params => { :sheet => { :home_team => "home", :away_team => "away", :game_id => Game.first.id, :user_id => User.first.id, :foo => "bar" } }
+          post "/sheets", :params => { :sheet => { :name => "new_new_sheet", :home_team => "home", :away_team => "away", :game_id => Game.first.id, :user_id => User.first.id, :foo => "bar" } }
 
           expect(response.status).to eq(201)
         end
