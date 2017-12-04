@@ -164,6 +164,15 @@ describe 'Sheets', :type => :request do
     it 'responds with sheet' do
       expect(body).to eq(expected_response)
     end
+
+    context 'with invalid sheet' do
+      subject { get '/sheets/foo' }
+
+      it 'response with a 404' do
+        expect(response.status).to eq(404)
+        expect(JSON.parse(response.body)['error']).to eq("Couldn't find Sheet with 'id'=foo")
+      end
+    end
   end
 
   describe 'put /sheets/:id' do
@@ -213,7 +222,7 @@ describe 'Sheets', :type => :request do
             :headers => headers
       end
 
-      it 'responds with an error' do
+      it 'responds with a 422' do
         expect(response.status).to eq(422)
         expect(body).to eq('home_team' => ["can't be blank"])
       end
