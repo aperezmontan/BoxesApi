@@ -6,15 +6,16 @@ describe 'Games', :type => :request do
   let!(:game) { create(:game) }
   let!(:games) { [game] }
 
+  # TODO: Remove this once code is in to retrieve current_user from devise
+  # before { allow(::User).to receive(:find).and_return(user) }
+
   describe 'post /games' do
     let(:body) { JSON.parse(response.body) }
     let(:game_params) do
       {
-        :name => 'new_new_game',
-        :home_team => 'home',
-        :away_team => 'away',
-        :game_id => Game.first.id,
-        :user_id => User.first.id
+        :home_team => 'NYG',
+        :away_team => 'NYJ',
+        :game_date => Time.now
       }
     end
 
@@ -33,8 +34,8 @@ describe 'Games', :type => :request do
       it 'responds with game' do
         subject
 
-        expect(body['game']['home_team']).to eq('home')
-        expect(body['game']['away_team']).to eq('away')
+        expect(body['game']['home_team']).to eq('NYG')
+        expect(body['game']['away_team']).to eq('NYJ')
       end
     end
 
@@ -42,15 +43,15 @@ describe 'Games', :type => :request do
       context 'without unpermitted params' do
         it 'ignores unpermitted params' do
           post '/games', :params => { :game => game_params.merge!(:foo => 'bar') }
-
+# binding.pry
           expect(response.status).to eq(201)
         end
       end
 
       context 'with incomplete params' do
         it 'responds with an error' do
-          post '/games', :params => { :game => { :home_team => 'home', :user_id => User.first.id } }
-
+          post '/games', :params => { :game => { :home_team => 'home', :game_time => Time.now } }
+# binding.pry
           expect(response.status).to eq(422)
         end
       end
@@ -66,15 +67,6 @@ describe 'Games', :type => :request do
           expect(body).to eq('user' => ['must exist'])
         end
       end
-
-      context 'without a game' do
-        it 'responds with an error' do
-          post '/games', :params => { :game => bad_game_params.merge!(:user_id => User.first.id) }
-
-          expect(response.status).to eq(422)
-          expect(body).to eq('game' => ['must exist'])
-        end
-      end
     end
   end
 
@@ -85,7 +77,7 @@ describe 'Games', :type => :request do
       games.map do |game|
         {
           'id' => game.id,
-          'name' => game.name,
+          'game_date' => game.game_date,
           'home_team' => game.home_team,
           'away_team' => game.away_team
         }
@@ -110,7 +102,7 @@ describe 'Games', :type => :request do
     let(:games_response) do
       {
         'id' => game.id,
-        'name' => game.name,
+        'game_date' => game.game_date,
         'home_team' => game.home_team,
         'away_team' => game.away_team
       }
@@ -145,7 +137,7 @@ describe 'Games', :type => :request do
     let(:games_response) do
       {
         'id' => game.id,
-        'name' => game.name,
+        'game_date' => game.game_date,
         'home_team' => game.home_team,
         'away_team' => game.away_team
       }
@@ -154,11 +146,11 @@ describe 'Games', :type => :request do
     let(:expected_response) { { 'game' => games_response } }
 
     context 'with valid params' do
-      subject { put "/games/#{game.id}", :params => { :game => { :home_team => 'NY', :away_team => 'NJ' } } }
+      subject { put "/games/#{game.id}", :params => { :game => { :home_team => 'LAC', :away_team => 'LAR' } } }
 
       it 'updates the game' do
-        expect(game.home_team).to eq('NY')
-        expect(game.away_team).to eq('NJ')
+        expect(game.home_team).to eq('LAC')
+        expect(game.away_team).to eq('LAR')
       end
 
       it 'responds 200 status' do
@@ -171,20 +163,11 @@ describe 'Games', :type => :request do
     end
 
     context 'with invalid params' do
-      subject { put "/games/#{game.id}", :params => { :game => { :home_team => nil } } }
+      subject { put "/games/#{game.id}", :params => { :game => { :home_team => "foo" } } }
 
       it 'responds with a 422' do
         expect(response.status).to eq(422)
         expect(JSON.parse(response.body)['error']).to eq("Validation failed: Home team can't be blank")
-      end
-    end
-
-    context 'with invalid game' do
-      subject { put '/games/foo', :params => { :game => { :home_team => 'NY', :away_team => 'NJ' } } }
-
-      it 'response with a 404' do
-        expect(response.status).to eq(404)
-        expect(JSON.parse(response.body)['error']).to eq("Couldn't find Game with 'id'=foo")
       end
     end
   end
