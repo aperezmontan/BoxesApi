@@ -4,15 +4,12 @@ module Api
   module V1
     class GamesController < ApplicationController
       # TODO: REMOVE THIS ONCE YOU HAVE ALL SERVICES
-      before_action :set_game, :only => %i[destroy show update]
-      # before_action :authenticate_user!, :only => [:create, :update]
+      before_action :set_game, :only => %i[show update]
+      before_action :authenticate_user!, :only => %i[create update]
       # before_action :permit_user_update, :only => [:update, :destroy]
 
       def create
-        binding.pry
-        # TODO: when devise is set up this won't be needed.  It sets current_user
-        current_user = User.find(game_params.fetch(:user_id))
-        @game = ::GameAdder.new(game_params, current_user).run
+        @game = ::GameAdder.new(game_params).run
 
         if @game.save
           render :json => @game, :status => :created, :adapter => :json
@@ -31,10 +28,7 @@ module Api
       end
 
       def update
-        # TODO: when devise is set up this won't be needed.  It sets current_user
-        binding.pry
-        current_user = User.find(@game.user_id)
-        @game = ::GameUpdater.new(game_params.merge!(:id => @game.id), current_user).run
+        @game = ::GameUpdater.new(game_params.merge!(:id => @game.id)).run
 
         render :json => @game, :adapter => :json
       end
@@ -51,7 +45,7 @@ module Api
 
       def game_params
         params.require(:game)
-              .permit(:home_team, :away_team, :box_amount, :password, :name, :closed, :game_id, :user_id)
+              .permit(:home_team, :away_team, :league, :game_date)
       end
     end
   end
