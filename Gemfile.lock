@@ -149,6 +149,9 @@ GEM
     rspec-expectations (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
+    rspec-its (1.2.0)
+      rspec-core (>= 3.0.0)
+      rspec-expectations (>= 3.0.0)
     rspec-mocks (3.7.0)
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.7.0)
@@ -215,6 +218,7 @@ DEPENDENCIES
   pg (~> 0.15)
   pry
   rails (= 5.1.4)
+  rspec-its
   rspec-rails
   rubocop
   sdoc (~> 0.4.0)

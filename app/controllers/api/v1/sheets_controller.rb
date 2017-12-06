@@ -4,13 +4,11 @@ module Api
   module V1
     class SheetsController < ApplicationController
       before_action :set_sheet, :only => %i[destroy show update]
-      # before_action :authenticate_user!, :only => [:create, :update, :destroy]
+      before_action :authenticate_user!, :only => %i[create update destroy]
       # before_action :permit_user_update, :only => [:update, :destroy]
 
       def create
-        # TODO: when devise is set up this won't be needed.  It sets current_user
-        current_user = User.find(sheet_params.fetch(:user_id))
-        @sheet = current_user.sheets.build(sheet_params)
+        @sheet = @current_user.sheets.build(sheet_params)
 
         if @sheet.save
           render :json => @sheet, :status => :created, :adapter => :json
@@ -47,7 +45,7 @@ module Api
       private
 
       def permit_user_update
-        raise ArgumentError unless @sheet.belongs_to_user?(current_user)
+        raise ArgumentError unless @sheet.belongs_to_user?(@current_user)
       end
 
       def set_sheet
