@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171206115154) do
+ActiveRecord::Schema.define(version: 20171206122642) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,9 +23,10 @@ ActiveRecord::Schema.define(version: 20171206115154) do
     t.bigint "sheet_id"
     t.string "home_team_id"
     t.string "away_team_id"
-    t.text "owner_name"
     t.integer "number", null: false
+    t.bigint "owner_id"
     t.index ["home_team_id", "away_team_id", "sheet_id"], name: "index_boxes_on_home_team_id_and_away_team_id_and_sheet_id", unique: true
+    t.index ["owner_id"], name: "index_boxes_on_owner_id", unique: true
     t.index ["sheet_id", "number"], name: "index_boxes_on_sheet_id_and_number", unique: true
     t.index ["sheet_id"], name: "index_boxes_on_sheet_id"
   end
@@ -40,8 +41,6 @@ ActiveRecord::Schema.define(version: 20171206115154) do
   end
 
   create_table "sheets", force: :cascade do |t|
-    t.string "home_team"
-    t.string "away_team"
     t.string "name", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -54,6 +53,7 @@ ActiveRecord::Schema.define(version: 20171206115154) do
     t.bigint "user_id"
     t.bigint "game_id"
     t.index ["game_id"], name: "index_sheets_on_game_id"
+    t.index ["id", "game_id"], name: "index_sheets_on_id_and_game_id", unique: true
     t.index ["sheet_code"], name: "index_sheets_on_sheet_code", unique: true
     t.index ["user_id", "game_id", "name"], name: "index_sheets_on_user_id_and_game_id_and_name", unique: true
   end
@@ -87,6 +87,7 @@ ActiveRecord::Schema.define(version: 20171206115154) do
   end
 
   add_foreign_key "boxes", "sheets"
+  add_foreign_key "boxes", "users", column: "owner_id"
   add_foreign_key "sheets", "games"
   add_foreign_key "sheets", "users"
 end
