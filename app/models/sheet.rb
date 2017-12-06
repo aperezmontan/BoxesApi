@@ -24,8 +24,9 @@ class Sheet < ApplicationRecord
       # Creates 100 boxes with coordinates being a letter between A and J
       ids = ('A'..'J').to_a
       id_array = ids.product(ids)
+      count = 0
       id_array.each do |x_coord, y_coord|
-        instance.boxes.build(:home_team_id => x_coord, :away_team_id => y_coord)
+        instance.boxes.build(:home_team_id => x_coord, :away_team_id => y_coord, :number => count)
       end
     end
   end
