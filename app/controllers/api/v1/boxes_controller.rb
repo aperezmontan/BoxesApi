@@ -28,7 +28,7 @@ module Api
       end
 
       def set_sheet
-        @sheet = ::S heet.find(params[:sheet_id])
+        @sheet = ::Sheet.find(params[:sheet_id])
       end
 
       def set_box

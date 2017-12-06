@@ -28,8 +28,8 @@ describe 'Games', :type => :request do
     context 'with valid params' do
       let(:request) do
         post '/games',
-        :params => { :game => game_params },
-        :headers => headers
+             :params => { :game => game_params },
+             :headers => headers
       end
 
       it_behaves_like 'authorized user endpoint'
@@ -53,8 +53,8 @@ describe 'Games', :type => :request do
       context 'with unpermitted params' do
         let(:request) do
           post '/games',
-          :params => { :game => game_params.merge!(:foo => 'bar') },
-          :headers => headers
+               :params => { :game => game_params.merge!(:foo => 'bar') },
+               :headers => headers
         end
 
         it 'ignores unpermitted params' do
@@ -65,8 +65,8 @@ describe 'Games', :type => :request do
       context 'with incomplete params' do
         let(:request) do
           post '/games',
-          :params => { :game => { :home_team => 'home', :game_time => Time.now.utc.iso8601 } },
-          :headers => headers
+               :params => { :game => { :home_team => 'home', :game_time => Time.now.utc.iso8601 } },
+               :headers => headers
         end
 
         it 'responds with an error' do
@@ -153,8 +153,8 @@ describe 'Games', :type => :request do
     context 'with valid params' do
       let(:request) do
         put "/games/#{game.id}",
-        :params => { :game => { :home_team => 'LAC', :away_team => 'LAR' } },
-        :headers => headers
+            :params => { :game => { :home_team => 'LAC', :away_team => 'LAR' } },
+            :headers => headers
       end
 
       it_behaves_like 'authorized user endpoint'
@@ -176,8 +176,8 @@ describe 'Games', :type => :request do
     context 'with invalid params' do
       let(:request) do
         put "/games/#{game.id}",
-        :params => { :game => { :home_team => "foo" } },
-        :headers => headers
+            :params => { :game => { :home_team => 'foo' } },
+            :headers => headers
       end
 
       it 'responds with a 422' do
