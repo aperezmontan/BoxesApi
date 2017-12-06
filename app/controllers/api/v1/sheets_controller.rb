@@ -51,7 +51,7 @@ module Api
 
       def sheet_params
         params.require(:sheet)
-              .permit(:home_team, :away_team, :box_amount, :password, :name, :closed, :game_id, :user_id)
+              .permit(:box_amount, :password, :name, :closed, :game_id)
       end
     end
   end

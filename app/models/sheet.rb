@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 class Sheet < ApplicationRecord
+  ### Associations
   has_many :boxes, :dependent => :destroy
   belongs_to :user
   belongs_to :game
 
-  validates :home_team, :away_team, :presence => true
+  delegate :home_team, :to => :game
+  delegate :away_team, :to => :game
+
+  ### Validations
+  validates :name, :presence => true
 
   def self.start_new_sheet(sheet_params)
     instance = new(sheet_params.merge!(:sheet_code => generate_code))
@@ -26,6 +31,7 @@ class Sheet < ApplicationRecord
       id_array = ids.product(ids)
       count = 0
       id_array.each do |x_coord, y_coord|
+        count += 1
         instance.boxes.build(:home_team_id => x_coord, :away_team_id => y_coord, :number => count)
       end
     end
