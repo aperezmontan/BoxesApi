@@ -28,7 +28,11 @@ describe 'Sheets', :type => :request do
     end
 
     context 'with valid params' do
-      let(:request) { post '/sheets', :params => { :sheet => sheet_params }, :headers => headers }
+      let(:request) do
+        post '/sheets',
+             :params => { :sheet => sheet_params },
+             :headers => headers
+      end
 
       it_behaves_like 'authorized user endpoint'
 
@@ -49,7 +53,11 @@ describe 'Sheets', :type => :request do
 
     context 'with bad params' do
       context 'without unpermitted params' do
-        let(:request) { post '/sheets', :params => { :sheet => sheet_params.merge!(:foo => 'bar') }, :headers => headers }
+        let(:request) do
+          post '/sheets',
+               :params => { :sheet => sheet_params.merge!(:foo => 'bar') },
+               :headers => headers
+        end
 
         it 'ignores unpermitted params' do
           expect(subject.status).to eq(201)
@@ -57,7 +65,11 @@ describe 'Sheets', :type => :request do
       end
 
       context 'with incomplete params' do
-        let(:request) { post '/sheets', :params => { :sheet => { :home_team => 'home', :user_id => User.first.id } }, :headers => headers }
+        let(:request) do
+          post '/sheets',
+               :params => { :sheet => { :home_team => 'home' } },
+               :headers => headers
+        end
 
         it 'responds with an error' do
           expect(subject.status).to eq(422)
@@ -66,18 +78,12 @@ describe 'Sheets', :type => :request do
 
       let(:bad_sheet_params) { { :home_team => 'home', :away_team => 'away' } }
 
-      # TODO: test when Devise is setup
-      xcontext 'without a user' do
-        let(:request) { post '/sheets', :params => { :sheet => bad_sheet_params.merge!(:game_id => Game.first.id) }, :headers => headers }
-
-        xit 'responds with an error' do
-          expect(subject.status).to eq(422)
-          expect(body).to eq('user' => ['must exist'])
-        end
-      end
-
       context 'without a game' do
-        let(:request) { post '/sheets', :params => { :sheet => bad_sheet_params.merge!(:user_id => User.first.id) }, :headers => headers }
+        let(:request) do
+          post '/sheets',
+               :params => { :sheet => bad_sheet_params },
+               :headers => headers
+        end
 
         it 'responds with an error' do
           expect(subject.status).to eq(422)
@@ -178,7 +184,11 @@ describe 'Sheets', :type => :request do
     let(:expected_response) { { 'sheet' => sheets_response } }
 
     context 'with valid params' do
-      let(:request) { put "/sheets/#{sheet.id}", :params => { :sheet => { :home_team => 'NY', :away_team => 'NJ' } }, :headers => headers  }
+      let(:request) do
+        put "/sheets/#{sheet.id}",
+            :params => { :sheet => { :home_team => 'NY', :away_team => 'NJ' } },
+            :headers => headers
+      end
 
       it_behaves_like 'authorized user endpoint'
 
@@ -197,7 +207,11 @@ describe 'Sheets', :type => :request do
     end
 
     context 'with invalid params' do
-      let(:request) { put "/sheets/#{sheet.id}", :params => { :sheet => { :home_team => nil } }, :headers => headers }
+      let(:request) do
+        put "/sheets/#{sheet.id}",
+            :params => { :sheet => { :home_team => nil } },
+            :headers => headers
+      end
 
       it 'responds with an error' do
         expect(response.status).to eq(422)

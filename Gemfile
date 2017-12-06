@@ -22,7 +22,7 @@ group :development do
 end
 
 group :test do
-  gem 'simplecov', :require => false
-  gem 'rspec-rails'
   gem 'rspec-its'
+  gem 'rspec-rails'
+  gem 'simplecov', :require => false
 end

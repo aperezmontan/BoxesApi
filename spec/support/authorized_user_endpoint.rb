@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples 'authorized user endpoint' do
   context 'when authorized user endpoint' do
     include_context 'shared auth'
@@ -9,17 +11,17 @@ shared_examples 'authorized user endpoint' do
 
     context 'when invalid auth headers are provided' do
       context 'when access token is invalid' do
-        let(:headers) { auth_headers.merge("access-token" => "foo") }
+        let(:headers) { auth_headers.merge('access-token' => 'foo') }
         its(:status) { should eq 401 }
       end
 
       context 'when client is invalid' do
-        let(:headers) { auth_headers.merge("client" => "foo") }
+        let(:headers) { auth_headers.merge('client' => 'foo') }
         its(:status) { should eq 401 }
       end
 
       context 'when email is invalid' do
-        let(:headers) { auth_headers.merge("uid" => "foo@me.com") }
+        let(:headers) { auth_headers.merge('uid' => 'foo@me.com') }
         its(:status) { should eq 401 }
       end
     end

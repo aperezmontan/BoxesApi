@@ -4,7 +4,7 @@ module Api
   module V1
     class SheetsController < ApplicationController
       before_action :set_sheet, :only => %i[destroy show update]
-      before_action :authenticate_user!, :only => [:create, :update, :destroy]
+      before_action :authenticate_user!, :only => %i[create update destroy]
       # before_action :permit_user_update, :only => [:update, :destroy]
 
       def create
