@@ -52,7 +52,7 @@ describe 'Sheets', :type => :request do
     end
 
     context 'with bad params' do
-      context 'without unpermitted params' do
+      context 'witho unpermitted params' do
         let(:request) do
           post '/sheets',
                :params => { :sheet => sheet_params.merge!(:foo => 'bar') },
@@ -112,13 +112,14 @@ describe 'Sheets', :type => :request do
       let(:request) { delete '/sheets/foo', :headers => headers }
 
       it 'responds with an error' do
-        expect(subject.status).to eq(422)
+        expect(subject.status).to eq(404)
         expect(subject.content_type).to eq('application/json')
+        expect(body['error']).to eq("Couldn't find Sheet with 'id'=foo")
       end
     end
   end
 
-  describe '/sheets' do
+  describe 'get /sheets' do
     let(:request) { get '/sheets' }
 
     let(:sheets_response) do
@@ -166,11 +167,11 @@ describe 'Sheets', :type => :request do
     end
 
     context 'with invalid sheet' do
-      subject { get '/sheets/foo' }
+      let(:request) { get '/sheets/foo' }
 
       it 'response with a 404' do
-        expect(response.status).to eq(404)
-        expect(JSON.parse(response.body)['error']).to eq("Couldn't find Sheet with 'id'=foo")
+        expect(subject.status).to eq(404)
+        expect(body['error']).to eq("Couldn't find Sheet with 'id'=foo")
       end
     end
   end
@@ -207,7 +208,7 @@ describe 'Sheets', :type => :request do
       end
 
       it 'responds 200 status' do
-        expect(response.status).to eq(200)
+        expect(subject.status).to eq(200)
       end
 
       it 'responds with sheet' do
@@ -223,8 +224,8 @@ describe 'Sheets', :type => :request do
       end
 
       it 'responds with a 422' do
-        expect(response.status).to eq(422)
-        expect(body).to eq('home_team' => ["can't be blank"])
+        expect(subject.status).to eq(422)
+        expect(body['error']).to eq("Validation failed: Home team can't be blank")
       end
     end
   end
