@@ -46,7 +46,7 @@ module Api
       end
 
       def set_sheet
-        @sheet = ::Sheet.find(params[:id])
+        @sheet ||= ::Sheet.find(params[:id])
       end
 
       def sheet_params

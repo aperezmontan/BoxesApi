@@ -40,7 +40,7 @@ module Api
       end
 
       def set_game
-        @game = ::Game.find(params[:id])
+        @game ||= ::Game.find(params[:id])
       end
 
       def game_params
