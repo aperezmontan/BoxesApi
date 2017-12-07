@@ -17,4 +17,8 @@ class ApplicationController < ActionController::API
   rescue_from ArgumentError do |exception|
     render :json => { :error => exception.message }, :status => :unprocessable_entity, :adapter => :json
   end
+
+  rescue_from ServiceError::BoxOwnerRemover do |exception|
+    render :json => { :error => exception.message }, :status => :forbidden, :adapter => :json
+  end
 end

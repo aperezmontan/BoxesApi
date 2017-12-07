@@ -6,17 +6,19 @@ module Api
       before_action :authenticate_user!
       before_action :set_box
 
-      def update
-        @box = ::BoxUpdater.new(box_params.merge!(:id => @box.id), @current_user).run
+      def set_owner
+        @box = ::BoxOwnerAdder.new(@box, @current_user).run
+
+        render :json => @box, :adapter => :json
+      end
+
+      def unset_owner
+        @box = ::BoxOwnerRemover.new(@box, @current_user).run
 
         render :json => @box, :adapter => :json
       end
 
       private
-
-      def box_params
-        params.require(:box).permit(:owner_name, :user_id)
-      end
 
       def set_box
         @box ||= ::Box.find(params[:id])
