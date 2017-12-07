@@ -96,7 +96,6 @@ describe 'Boxes', :type => :request do
       end
 
       xit 'or admin' do
-
       end
     end
   end

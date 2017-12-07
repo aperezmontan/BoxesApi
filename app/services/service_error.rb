@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ServiceError < StandardError
   attr_accessor :object
 

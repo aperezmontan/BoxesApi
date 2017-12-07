@@ -7,8 +7,8 @@ Rails.application.routes.draw do
       resources :games, :except => %i[new edit destroy]
       resources :sheets, :except => %i[new edit]
       resources :boxes, :only => [:index] do
-        get 'set_owner', on: :member
-        get 'unset_owner', on: :member
+        get 'set_owner', :on => :member
+        get 'unset_owner', :on => :member
       end
     end
   end
