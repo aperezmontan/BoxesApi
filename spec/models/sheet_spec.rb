@@ -8,13 +8,11 @@ describe ::Sheet do
   let(:sheet_params) do
     {
       :name => 'new_sheet',
-      :home_team => 'NY',
-      :away_team => 'NJ',
       :user_id => user.id,
       :game_id => game.id
     }
   end
-  let(:bad_sheet_params) { { :name => 'new_sheet', :home_team => 'NY', :away_team => 'NJ', :game_id => game.id } }
+  let(:bad_sheet_params) { { :name => 'new_sheet', :game_id => game.id } }
 
   context '#start_new_sheet' do
     context 'when sheet has all the correct params' do
@@ -41,8 +39,6 @@ describe ::Sheet do
           let(:invalid_params) do
             {
               :name => 'new_sheet',
-              :home_team => 'NY',
-              :user_id => user.id,
               :game_id => game.id
             }
           end
@@ -53,7 +49,7 @@ describe ::Sheet do
           end
         end
 
-        context 'when Sheet violates uniquenss constraint (game, user, name)' do
+        context 'when Sheet violates uniqueness constraint (game, user, name)' do
           before { Sheet.create(sheet_params) }
 
           it "doesn't save and return a not unique error" do

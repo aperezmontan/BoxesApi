@@ -20,10 +20,7 @@ describe 'Sheets', :type => :request do
     let(:sheet_params) do
       {
         :name => 'new_new_sheet',
-        :home_team => 'home',
-        :away_team => 'away',
-        :game_id => Game.first.id,
-        :user_id => User.first.id
+        :game_id => Game.first.id
       }
     end
 
@@ -46,13 +43,13 @@ describe 'Sheets', :type => :request do
 
       it 'responds with sheet' do
         expect(subject.content_type).to eq('application/json')
-        expect(body['sheet']['home_team']).to eq('home')
-        expect(body['sheet']['away_team']).to eq('away')
+        expect(body['sheet']['home_team']).to eq('NYG')
+        expect(body['sheet']['away_team']).to eq('NYJ')
       end
     end
 
     context 'with bad params' do
-      context 'without unpermitted params' do
+      context 'with unpermitted params' do
         let(:request) do
           post '/sheets',
                :params => { :sheet => sheet_params.merge!(:foo => 'bar') },
@@ -67,7 +64,7 @@ describe 'Sheets', :type => :request do
       context 'with incomplete params' do
         let(:request) do
           post '/sheets',
-               :params => { :sheet => { :home_team => 'home' } },
+               :params => { :sheet => { :game_id => Game.first.id } },
                :headers => headers
         end
 
@@ -76,7 +73,7 @@ describe 'Sheets', :type => :request do
         end
       end
 
-      let(:bad_sheet_params) { { :home_team => 'home', :away_team => 'away' } }
+      let(:bad_sheet_params) { { :name => 'bad sheet' } }
 
       context 'without a game' do
         let(:request) do
@@ -112,13 +109,14 @@ describe 'Sheets', :type => :request do
       let(:request) { delete '/sheets/foo', :headers => headers }
 
       it 'responds with an error' do
-        expect(subject.status).to eq(422)
+        expect(subject.status).to eq(404)
         expect(subject.content_type).to eq('application/json')
+        expect(body['error']).to eq("Couldn't find Sheet with 'id'=foo")
       end
     end
   end
 
-  describe '/sheets' do
+  describe 'get /sheets' do
     let(:request) { get '/sheets' }
 
     let(:sheets_response) do
@@ -164,6 +162,15 @@ describe 'Sheets', :type => :request do
     it 'responds with sheet' do
       expect(body).to eq(expected_response)
     end
+
+    context 'with invalid sheet' do
+      let(:request) { get '/sheets/foo' }
+
+      it 'response with a 404' do
+        expect(subject.status).to eq(404)
+        expect(body['error']).to eq("Couldn't find Sheet with 'id'=foo")
+      end
+    end
   end
 
   describe 'put /sheets/:id' do
@@ -175,7 +182,7 @@ describe 'Sheets', :type => :request do
     let(:sheets_response) do
       {
         'id' => sheet.id,
-        'name' => sheet.name,
+        'name' => 'super_new_sheet',
         'home_team' => sheet.home_team,
         'away_team' => sheet.away_team
       }
@@ -186,19 +193,18 @@ describe 'Sheets', :type => :request do
     context 'with valid params' do
       let(:request) do
         put "/sheets/#{sheet.id}",
-            :params => { :sheet => { :home_team => 'NY', :away_team => 'NJ' } },
+            :params => { :sheet => { :name => 'super_new_sheet' } },
             :headers => headers
       end
 
       it_behaves_like 'authorized user endpoint'
 
       it 'updates the sheet' do
-        expect(sheet.home_team).to eq('NY')
-        expect(sheet.away_team).to eq('NJ')
+        expect(sheet.name).to eq('super_new_sheet')
       end
 
       it 'responds 200 status' do
-        expect(response.status).to eq(200)
+        expect(subject.status).to eq(200)
       end
 
       it 'responds with sheet' do
@@ -209,13 +215,13 @@ describe 'Sheets', :type => :request do
     context 'with invalid params' do
       let(:request) do
         put "/sheets/#{sheet.id}",
-            :params => { :sheet => { :home_team => nil } },
+            :params => { :sheet => { :name => nil } },
             :headers => headers
       end
 
-      it 'responds with an error' do
-        expect(response.status).to eq(422)
-        expect(body).to eq('home_team' => ["can't be blank"])
+      it 'responds with a 422' do
+        expect(subject.status).to eq(422)
+        expect(body['error']).to eq("Validation failed: Name can't be blank")
       end
     end
   end
