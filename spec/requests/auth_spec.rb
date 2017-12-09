@@ -19,9 +19,10 @@ describe 'Auth', :type => :request do
       :password => 'password'
     }
   end
-  let(:request) { post '/auth/sign_in', :params => params }
 
   context 'sign_in' do
+    let(:request) { post '/auth/sign_in', :params => params }
+
     context 'with valid credentials' do
       it 'returns success' do
         expect(subject.status).to eq(200)
@@ -60,6 +61,56 @@ describe 'Auth', :type => :request do
         it 'returns an error' do
           expect(subject.status).to eq(401)
           expect(body).to eq('errors' => ['Invalid login credentials. Please try again.'])
+        end
+
+        it 'does not return an access token' do
+          expect(headers.keys).to_not include('access-token')
+        end
+      end
+    end
+  end
+
+  context 'sign_up' do
+    let(:request) { post '/auth/sign_in', :params => params }
+
+    context 'with valid credentials' do
+      it 'returns success' do
+        expect(subject.status).to eq(200)
+      end
+
+      it 'returns an access token' do
+        expect(headers.keys).to include('access-token')
+      end
+
+      it 'you can use that access token to make requests' do
+        access_headers = headers.slice('Content-Type', 'access-token', 'token-type', 'client', 'expiry', 'uid')
+        get "/boxes/#{box.id}/set_owner", :headers => access_headers
+        expect(response.status).to eq(200)
+      end
+    end
+
+    context 'with bad credentials' do
+      let(:request) { post '/auth', :params => bad_params }
+
+      context 'bad email' do
+        let(:bad_params) { params.merge!(:email => '@me.com') }
+
+        it 'returns an error' do
+          expect(subject.status).to eq(422)
+          expect(body['errors']['email']).to eq(['is invalid', 'is not an email'])
+        end
+
+        it 'does not return an access token' do
+          expect(headers.keys).to_not include('access-token')
+        end
+      end
+
+      context 'bad password' do
+        let(:bad_params) { params.merge!(:password => 'foo') }
+
+        it 'returns an error' do
+          expect(subject.status).to eq(422)
+          expect(body['errors']['password']).to eq(['is too short (minimum is 8 characters)'])
         end
 
         it 'does not return an access token' do
