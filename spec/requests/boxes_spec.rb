@@ -4,22 +4,7 @@ require 'rails_helper'
 
 describe 'Boxes', :type => :request do
   include_context 'shared auth'
-
-  let(:owner) { User.first || create(:user) }
-  let(:game) { create(:game) }
-  let(:sheet_params) do
-    {
-      :name => 'new_sheet',
-      :user_id => owner.id,
-      :game_id => game.id
-    }
-  end
-  let!(:sheet) do
-    sheet = ::Sheet.start_new_sheet(sheet_params)
-    sheet.save
-    sheet
-  end
-  let!(:box) { sheet.boxes.sample }
+  include_context 'new sheet'
 
   let(:headers) { auth_headers }
   let(:body) { JSON.parse(subject.body) }

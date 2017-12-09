@@ -20,7 +20,6 @@ describe 'Auth', :type => :request do
     }
   end
   let(:request) { post "/auth/sign_in", :params => params }
-  let(:box) { Box.all.sample }
 
   context 'sign_in' do
     context 'with valid credentials' do
